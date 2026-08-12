@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: eonraider/rustdoc-ultimate@main
+      - uses: eonraider/rustdoc-ultimate@v1
         with:
           mode: conservative
           scope: changed-files

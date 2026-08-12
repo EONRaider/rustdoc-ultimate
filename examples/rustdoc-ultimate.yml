@@ -44,7 +44,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: eonraider/rustdoc-ultimate@main
+      - uses: eonraider/rustdoc-ultimate@v1
         with:
           # See the "Using rustdoc-ultimate as a GitHub Action" section of
           # this repo's README for the full input reference.
