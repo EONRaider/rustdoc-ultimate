@@ -1,6 +1,6 @@
 # rustdoc-ultimate — The Complete Skill for Documenting Rust Code
 
-A comprehensive reference for writing, structuring, testing, and shipping Rust documentation with rustdoc to the highest standard, covering libraries, public APIs, and binaries/CLIs. Synthesized from the official rustdoc book, the Rust API Guidelines, RFCs 505/1270/1574/1687/1946/3631, the Rust Project Primer, Tangram Vision's rustdoc guide, and current (2025–2026) ecosystem tooling.
+A comprehensive reference for writing, structuring, testing, and shipping Rust documentation with rustdoc to the highest standard, covering libraries, public APIs, and binaries/CLIs. Synthesized from the [official rustdoc book](https://doc.rust-lang.org/rustdoc/), the [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/), RFCs [505](https://rust-lang.github.io/rfcs/0505-api-comment-conventions.html)/[1270](https://rust-lang.github.io/rfcs/1270-deprecation.html)/[1574](https://rust-lang.github.io/rfcs/1574-more-api-documentation-conventions.html)/[1687](https://github.com/rust-lang/rfcs/pull/1687)/[1946](https://rust-lang.github.io/rfcs/1946-intra-rustdoc-links.html)/[3631](https://rust-lang.github.io/rfcs/3631-rustdoc-cfgs-handling.html), the [Rust Project Primer](https://rustprojectprimer.com/documentation/rustdoc.html), [Tangram Vision's rustdoc guide](https://www.tangramvision.com/blog/making-great-docs-with-rustdoc), and current (2025–2026) ecosystem tooling.
 
 ## About this repo
 
