@@ -9,16 +9,16 @@ A comprehensive reference for writing, structuring, testing, and shipping Rust d
 This README is the research itself. The repo also includes [rustdoc-ultimate.md](rustdoc-ultimate.md), a [Claude Skill](https://docs.claude.com/en/docs/claude-code/skills) built from this research — it teaches Claude to write, review, and refactor Rust documentation to the standard described below.
 
 <details id="using-rustdoc-ultimate-as-a-claude-skill">
-<summary><strong>Setup and Installation Instructions</strong> (using rustdoc-ultimate as a Claude Skill)</summary>
+<summary><strong>Using as a Claude Skill</strong></summary>
 
 To use the skill in Claude Code, download `rustdoc-ultimate.md` and place it at `.claude/skills/rustdoc-ultimate/SKILL.md` in your project (or `~/.claude/skills/rustdoc-ultimate/SKILL.md` to make it available across projects).
 
 </details>
 
-This repo also ships a [GitHub Action](#using-rustdoc-ultimate-as-a-github-action) that runs the skill in CI and opens a pull request with the results, for repos that want documentation upkeep automated rather than invoked interactively.
-
 <details id="using-rustdoc-ultimate-as-a-github-action">
-<summary><strong>Setup and Installation Instructions</strong> (using rustdoc-ultimate as a GitHub Action)</summary>
+<summary><strong>Using as a GitHub Action</strong></summary>
+
+This repo also ships a GitHub Action that runs the skill in CI and opens a pull request with the results, for repos that want documentation upkeep automated rather than invoked interactively.
 
 Instead of invoking the skill interactively, a Rust repository can run it as a CI step: on every pull request (by default), Claude documents or fixes what's missing and opens a second pull request with the result — it never commits directly to your branch.
 
