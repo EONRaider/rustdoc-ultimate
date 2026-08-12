@@ -25,7 +25,7 @@ inputs:
     required: false
     default: "changed-files"
   anthropic_api_key:
-    description: "Anthropic API key, e.g. ${{ secrets.ANTHROPIC_API_KEY }}."
+    description: "Anthropic API key, e.g. the caller workflow's ANTHROPIC_API_KEY secret."
     required: true
   base_branch:
     description: >-
