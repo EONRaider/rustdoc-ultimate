@@ -17,7 +17,9 @@ Instead of invoking the skill interactively, a Rust repository can run it as a C
 ### Prerequisites
 
 1. Create an API key in the [Claude Console](https://console.anthropic.com) and add it as a repository secret named `ANTHROPIC_API_KEY` (**Settings → Secrets and variables → Actions → New repository secret**).
-2. Be aware this is billed per the [Claude API](https://claude.com/platform/api) — each run's cost scales with how much code is in scope and how many turns it takes. Use the `mode`/`scope` inputs below, and `claude_args: "--max-turns N"`, to keep runs small and predictable.
+2. Install the [Claude GitHub App](https://github.com/apps/claude) on the repository (or your account/organization). `anthropics/claude-code-action`, which this action wraps, needs it for git operations even when authenticating with an API key.
+3. Enable **Settings → Actions → General → Workflow permissions → "Allow GitHub Actions to create and approve pull requests"** — the action's final step opens a PR with `peter-evans/create-pull-request`, which GitHub blocks by default.
+4. Be aware this is billed per the [Claude API](https://claude.com/platform/api) — each run's cost scales with how much code is in scope and how many turns it takes. Use the `mode`/`scope` inputs below, and `claude_args: "--max-turns N"`, to keep runs small and predictable.
 
 ### Setup
 

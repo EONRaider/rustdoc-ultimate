@@ -75,6 +75,13 @@ runs:
       run: |
         mkdir -p .claude/skills/rustdoc-ultimate
         cp "${{ github.action_path }}/rustdoc-ultimate.md" .claude/skills/rustdoc-ultimate/SKILL.md
+        # Keep this CI-only install out of the opened PR's diff. This only
+        # suppresses untracked files, so a repo that already tracks its own
+        # copy of the skill still shows up normally if this run's copy
+        # differs from it.
+        if ! git ls-files --error-unmatch .claude/skills/rustdoc-ultimate/SKILL.md >/dev/null 2>&1; then
+          echo ".claude/skills/rustdoc-ultimate/" >> .git/info/exclude
+        fi
 
     - name: Detect undocumented items (conservative mode)
       if: inputs.mode == 'conservative'
