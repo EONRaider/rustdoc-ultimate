@@ -20,3 +20,13 @@ Open an issue if you spot something outdated (a changed rustdoc behavior, a supe
 
 - Match the existing tone: concise, reference-style, backed by citations rather than opinion.
 - Keep Markdown headings and section structure consistent with the rest of the file you're editing.
+
+## Versioning the GitHub Action
+
+`action.yml` and `scripts/` are versioned separately from the research content, using [Semantic Versioning](https://semver.org/). Any change to either:
+
+1. Gets a [CHANGELOG.md](CHANGELOG.md) entry under `[Unreleased]`, moved into a new dated `[X.Y.Z]` section when released.
+2. Gets a new `vX.Y.Z` tag — patch for a fix, minor for a backward-compatible input/feature, major for a breaking change to inputs or behavior.
+3. Moves the floating `v1` tag (or `v2`, etc.) to match, so repos pinned to `@v1` pick up non-breaking updates automatically.
+
+README/skill changes with no effect on `action.yml`/`scripts/` don't need a version bump.
