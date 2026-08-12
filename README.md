@@ -2,6 +2,12 @@
 
 A comprehensive reference for writing, structuring, testing, and shipping Rust documentation with rustdoc to the highest standard, covering libraries, public APIs, and binaries/CLIs. Synthesized from the official rustdoc book, the Rust API Guidelines, RFCs 505/1270/1574/1687/1946/3631, the Rust Project Primer, Tangram Vision's rustdoc guide, and current (2025–2026) ecosystem tooling.
 
+## About this repo
+
+This README is the research itself. The repo also includes [rustdoc-ultimate.md](rustdoc-ultimate.md), a [Claude Skill](https://docs.claude.com/en/docs/claude-code/skills) built from this research — it teaches Claude to write, review, and refactor Rust documentation to the standard described below.
+
+To use the skill in Claude Code, download `rustdoc-ultimate.md` and place it at `.claude/skills/rustdoc-ultimate/SKILL.md` in your project (or `~/.claude/skills/rustdoc-ultimate/SKILL.md` to make it available across projects).
+
 ## TL;DR
 
 - **Document behavior, not names.** Every public item gets a one-line summary written in third-person singular present indicative form ("Returns", not "Return", per RFC 505), an `# Examples` section whose code is a real doc-test using `?` (never `unwrap`/`try!` — the API Guidelines note "example code is often copied verbatim by users"), and the relevant `# Errors` / `# Panics` / `# Safety` sections; enforce it with `#![deny(missing_docs)]`, `#![deny(rustdoc::broken_intra_doc_links)]`, and `RUSTDOCFLAGS="-D warnings" cargo doc` in CI.
