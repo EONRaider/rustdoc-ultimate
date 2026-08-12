@@ -11,7 +11,8 @@ scope_file="${SCOPE_FILE:-}"
 missing_docs_file="${MISSING_DOCS_FILE:-}"
 
 {
-  echo "/rustdoc-ultimate"
+  echo "Read and follow the documentation standard described in"
+  echo ".claude/skills/rustdoc-ultimate/SKILL.md, then apply it to this task:"
   echo
 
   if [[ "$scope" == "whole-repo" ]]; then
