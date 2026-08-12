@@ -12,7 +12,8 @@ To use the skill in Claude Code, download `rustdoc-ultimate.md` and place it at 
 
 This repo also ships a [GitHub Action](#using-rustdoc-ultimate-as-a-github-action) that runs the skill in CI and opens a pull request with the results, for repos that want documentation upkeep automated rather than invoked interactively.
 
-## Using rustdoc-ultimate as a GitHub Action
+<details id="using-rustdoc-ultimate-as-a-github-action">
+<summary><strong>Setup and Installation Instructions</strong> (using rustdoc-ultimate as a GitHub Action)</summary>
 
 Instead of invoking the skill interactively, a Rust repository can run it as a CI step: on every pull request (by default), Claude documents or fixes what's missing and opens a second pull request with the result — it never commits directly to your branch.
 
@@ -72,6 +73,8 @@ The example file also shows (commented out) how to trigger on `workflow_dispatch
 > `pull_request_labels` defaults to `documentation`, but GitHub won't auto-create a missing label — if your repository doesn't already have one with that name, PR creation will fail. Create the label first, or pass `pull_request_labels: ""` to skip labeling.
 
 This section documents the automated path; the manual install instructions above remain the way to use the skill without CI.
+
+</details>
 
 ## TL;DR
 
