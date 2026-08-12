@@ -45,6 +45,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write # lets the action create pull_request_labels that don't exist yet
   id-token: write # required by anthropics/claude-code-action even with anthropic_api_key
 
 jobs:
@@ -72,10 +73,7 @@ The example file also shows (commented out) how to trigger on `workflow_dispatch
 | `anthropic_api_key` | — (required) | Your `ANTHROPIC_API_KEY` repository secret. |
 | `base_branch` | event's base ref | Branch to diff against for `scope: changed-files` on `pull_request`/`workflow_dispatch`/`schedule` triggers. |
 | `claude_args` | — | Extra CLI arguments appended to the underlying `claude-code-action` call, e.g. `--max-turns 15 --model claude-sonnet-5`. |
-| `pull_request_labels` | `documentation` | Comma-separated labels applied to the opened PR. |
-
-> [!NOTE]
-> `pull_request_labels` defaults to `documentation`, but GitHub won't auto-create a missing label — if your repository doesn't already have one with that name, PR creation will fail. Create the label first, or pass `pull_request_labels: ""` to skip labeling.
+| `pull_request_labels` | `documentation` | Comma-separated labels applied to the opened PR. Any label that doesn't already exist in the repository is created automatically (requires the `issues: write` permission shown above); pass `pull_request_labels: ""` to skip labeling entirely. |
 
 This section documents the automated path; the manual install instructions above remain the way to use the skill without CI.
 

@@ -11,6 +11,12 @@ tag for reproducible builds.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-08-12
+
+### Fixed
+
+- `pull_request_labels` (default `documentation`) made PR creation fail outright when the label didn't already exist in the target repo. `scripts/ensure-labels.sh` now creates any missing label before `create-pull-request` runs, so the default works out of the box. Requires the `issues: write` permission, now included in the example workflow and README.
+
 ## [1.0.0] - 2026-08-12
 
 ### Added
@@ -56,5 +62,6 @@ tag for reproducible builds.
   call). Replaced with an explicit instruction for Claude to `Read` the skill
   file directly, which doesn't depend on CLI-level slash-command resolution.
 
-[Unreleased]: https://github.com/EONRaider/rustdoc-ultimate/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/EONRaider/rustdoc-ultimate/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/EONRaider/rustdoc-ultimate/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/EONRaider/rustdoc-ultimate/releases/tag/v1.0.0

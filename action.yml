@@ -118,6 +118,14 @@ runs:
           --allowedTools "Read,Edit,Grep,Glob,Bash(cargo doc:*),Bash(cargo test --doc:*)"
           ${{ inputs.claude_args }}
 
+    - name: Ensure PR labels exist
+      if: inputs.pull_request_labels != ''
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        LABELS: ${{ inputs.pull_request_labels }}
+      run: bash "${{ github.action_path }}/scripts/ensure-labels.sh"
+
     - name: Open pull request with documentation changes
       id: create-pr
       uses: peter-evans/create-pull-request@v7
