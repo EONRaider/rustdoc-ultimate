@@ -1,0 +1,53 @@
+name: rustdoc-ultimate
+
+# Default trigger: run on every push to main/master and open a PR with any
+# documentation fixes. Copy this file to .github/workflows/ in your Rust
+# repository and adjust as needed.
+on:
+  push:
+    branches: [main, master]
+
+  # Alternative/additional triggers — uncomment as needed.
+  #
+  # Run against the diff of every pull request instead of (or in addition
+  # to) pushes to main:
+  # pull_request:
+  #   branches: [main, master]
+  #
+  # Run manually from the Actions tab, with mode/scope overrides:
+  # workflow_dispatch:
+  #   inputs:
+  #     mode:
+  #       description: "Guardrail mode"
+  #       type: choice
+  #       default: conservative
+  #       options: [conservative, aggressive]
+  #     scope:
+  #       description: "Files to review"
+  #       type: choice
+  #       default: changed-files
+  #       options: [changed-files, whole-repo]
+  #
+  # Run on a schedule, e.g. a weekly whole-repo sweep:
+  # schedule:
+  #   - cron: "0 6 * * 1"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  rustdoc-ultimate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: eonraider/rustdoc-ultimate@main
+        with:
+          # See the "Using rustdoc-ultimate as a GitHub Action" section of
+          # this repo's README for the full input reference.
+          mode: conservative # or: ${{ inputs.mode }} if using workflow_dispatch above
+          scope: changed-files # or: ${{ inputs.scope }} if using workflow_dispatch above
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}

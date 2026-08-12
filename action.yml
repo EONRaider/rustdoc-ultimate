@@ -1,0 +1,139 @@
+name: "rustdoc-ultimate"
+description: >-
+  Runs the rustdoc-ultimate Claude Skill against a Rust repository and opens a
+  pull request with any documentation it adds or improves. Never commits
+  directly to the calling branch.
+author: "EONRaider"
+branding:
+  icon: "book-open"
+  color: "orange"
+
+inputs:
+  mode:
+    description: >-
+      "conservative" only adds documentation to items the missing_docs lint
+      flags as structurally undocumented, and never touches existing doc
+      text. "aggressive" also reviews and rewrites existing documentation
+      that falls short of the rustdoc-ultimate standard.
+    required: false
+    default: "conservative"
+  scope:
+    description: >-
+      "changed-files" limits Claude to the *.rs files changed by the
+      triggering push/PR. "whole-repo" lets it review every file in the
+      crate/workspace.
+    required: false
+    default: "changed-files"
+  anthropic_api_key:
+    description: "Anthropic API key, e.g. ${{ secrets.ANTHROPIC_API_KEY }}."
+    required: true
+  base_branch:
+    description: >-
+      Branch to diff against for scope=changed-files on pull_request,
+      workflow_dispatch, or schedule triggers. Defaults to the event's own
+      base ref, or the repository's default branch if that's unavailable.
+    required: false
+    default: ""
+  claude_args:
+    description: >-
+      Extra CLI arguments appended to the claude-code-action invocation,
+      e.g. "--max-turns 15 --model claude-sonnet-5". Merged after this
+      action's own --allowedTools/--max-turns defaults.
+    required: false
+    default: ""
+  pull_request_labels:
+    description: "Comma-separated labels to apply to the opened pull request."
+    required: false
+    default: "documentation"
+
+outputs:
+  pull_request_url:
+    description: "URL of the pull request opened with the documentation changes, if any."
+    value: ${{ steps.create-pr.outputs.pull-request-url }}
+  pull_request_number:
+    description: "Number of the pull request opened with the documentation changes, if any."
+    value: ${{ steps.create-pr.outputs.pull-request-number }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Resolve documentation scope
+      id: scope
+      shell: bash
+      env:
+        INPUT_SCOPE: ${{ inputs.scope }}
+        INPUT_BASE_BRANCH: ${{ inputs.base_branch }}
+        GITHUB_EVENT_NAME: ${{ github.event_name }}
+        GITHUB_EVENT_PATH: ${{ github.event_path }}
+        SCOPE_FILE: ${{ runner.temp }}/rustdoc-ultimate-scope.txt
+      run: |
+        bash "${{ github.action_path }}/scripts/collect-scope.sh"
+        echo "scope_file=${SCOPE_FILE}" >> "$GITHUB_OUTPUT"
+
+    - name: Install rustdoc-ultimate skill
+      shell: bash
+      run: |
+        mkdir -p .claude/skills/rustdoc-ultimate
+        cp "${{ github.action_path }}/rustdoc-ultimate.md" .claude/skills/rustdoc-ultimate/SKILL.md
+
+    - name: Detect undocumented items (conservative mode)
+      if: inputs.mode == 'conservative'
+      shell: bash
+      env:
+        SCOPE_FILE: ${{ steps.scope.outputs.scope_file }}
+        MISSING_DOCS_FILE: ${{ runner.temp }}/rustdoc-ultimate-missing-docs.txt
+      run: |
+        bash "${{ github.action_path }}/scripts/lint-missing-docs.sh"
+        echo "missing_docs_file=${MISSING_DOCS_FILE}" >> "$GITHUB_OUTPUT"
+      id: lint
+
+    - name: Build prompt
+      id: prompt
+      shell: bash
+      env:
+        INPUT_MODE: ${{ inputs.mode }}
+        INPUT_SCOPE: ${{ inputs.scope }}
+        SCOPE_FILE: ${{ steps.scope.outputs.scope_file }}
+        MISSING_DOCS_FILE: ${{ steps.lint.outputs.missing_docs_file }}
+        PROMPT_FILE: ${{ runner.temp }}/rustdoc-ultimate-prompt.txt
+      run: |
+        bash "${{ github.action_path }}/scripts/build-prompt.sh"
+        {
+          echo "prompt<<RUSTDOC_ULTIMATE_EOF"
+          cat "$PROMPT_FILE"
+          echo "RUSTDOC_ULTIMATE_EOF"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Run rustdoc-ultimate
+      uses: anthropics/claude-code-action@v1
+      with:
+        anthropic_api_key: ${{ inputs.anthropic_api_key }}
+        prompt: ${{ steps.prompt.outputs.prompt }}
+        claude_args: >-
+          --max-turns 25
+          --allowedTools "Read,Edit,Grep,Glob,Bash(cargo doc:*),Bash(cargo test --doc:*)"
+          ${{ inputs.claude_args }}
+
+    - name: Open pull request with documentation changes
+      id: create-pr
+      uses: peter-evans/create-pull-request@v7
+      with:
+        commit-message: "docs: apply rustdoc-ultimate (${{ inputs.mode }}, ${{ inputs.scope }})"
+        branch: rustdoc-ultimate/${{ github.run_id }}
+        title: "docs: rustdoc-ultimate documentation pass (${{ inputs.mode }})"
+        body: >-
+          Automated documentation pass by the
+          [rustdoc-ultimate](https://github.com/eonraider/rustdoc-ultimate) GitHub Action.
+
+
+          - Mode: `${{ inputs.mode }}`
+
+          - Scope: `${{ inputs.scope }}`
+
+          - Triggered by: ${{ github.sha }}
+
+
+          Review the diff before merging — conservative mode only fills in missing
+          documentation, aggressive mode may also rewrite existing docs.
+        labels: ${{ inputs.pull_request_labels }}
+        delete-branch: true

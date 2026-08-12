@@ -8,6 +8,63 @@ This README is the research itself. The repo also includes [rustdoc-ultimate.md]
 
 To use the skill in Claude Code, download `rustdoc-ultimate.md` and place it at `.claude/skills/rustdoc-ultimate/SKILL.md` in your project (or `~/.claude/skills/rustdoc-ultimate/SKILL.md` to make it available across projects).
 
+This repo also ships a [GitHub Action](#using-rustdoc-ultimate-as-a-github-action) that runs the skill in CI and opens a pull request with the results, for repos that want documentation upkeep automated rather than invoked interactively.
+
+## Using rustdoc-ultimate as a GitHub Action
+
+Instead of invoking the skill interactively, a Rust repository can run it as a CI step: on every push (by default), Claude documents or fixes what's missing and opens a pull request with the result — it never commits directly to your branch.
+
+### Prerequisites
+
+1. Create an API key in the [Claude Console](https://console.anthropic.com) and add it as a repository secret named `ANTHROPIC_API_KEY` (**Settings → Secrets and variables → Actions → New repository secret**).
+2. Be aware this is billed per the [Claude API](https://claude.com/platform/api) — each run's cost scales with how much code is in scope and how many turns it takes. Use the `mode`/`scope` inputs below, and `claude_args: "--max-turns N"`, to keep runs small and predictable.
+
+### Setup
+
+Copy [examples/rustdoc-ultimate.yml](examples/rustdoc-ultimate.yml) into `.github/workflows/` in your repository:
+
+```yaml
+name: rustdoc-ultimate
+on:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  rustdoc-ultimate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: eonraider/rustdoc-ultimate@main
+        with:
+          mode: conservative
+          scope: changed-files
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+```
+
+The example file also shows (commented out) how to trigger on `pull_request`, `workflow_dispatch` with per-run `mode`/`scope` overrides, or a `schedule`.
+
+### Inputs
+
+| Input | Default | Meaning |
+|---|---|---|
+| `mode` | `conservative` | **Conservative** only documents items the `missing_docs` rustdoc lint flags as structurally undocumented, and never edits existing doc text. **Aggressive** additionally reviews and rewrites existing documentation that falls short of the standard described in this README. |
+| `scope` | `changed-files` | **changed-files** limits the run to the `*.rs` files touched by the triggering push/PR. **whole-repo** lets Claude review every file in the crate/workspace. |
+| `anthropic_api_key` | — (required) | Your `ANTHROPIC_API_KEY` repository secret. |
+| `base_branch` | event's base ref | Branch to diff against for `scope: changed-files` on `pull_request`/`workflow_dispatch`/`schedule` triggers. |
+| `claude_args` | — | Extra CLI arguments appended to the underlying `claude-code-action` call, e.g. `--max-turns 15 --model claude-sonnet-5`. |
+| `pull_request_labels` | `documentation` | Comma-separated labels applied to the opened PR. |
+
+> [!NOTE]
+> `pull_request_labels` defaults to `documentation`, but GitHub won't auto-create a missing label — if your repository doesn't already have one with that name, PR creation will fail. Create the label first, or pass `pull_request_labels: ""` to skip labeling.
+
+This section documents the automated path; the manual install instructions above remain the way to use the skill without CI.
+
 ## TL;DR
 
 - **Document behavior, not names.** Every public item gets a one-line summary written in third-person singular present indicative form ("Returns", not "Return", per RFC 505), an `# Examples` section whose code is a real doc-test using `?` (never `unwrap`/`try!` — the API Guidelines note "example code is often copied verbatim by users"), and the relevant `# Errors` / `# Panics` / `# Safety` sections; enforce it with `#![deny(missing_docs)]`, `#![deny(rustdoc::broken_intra_doc_links)]`, and `RUSTDOCFLAGS="-D warnings" cargo doc` in CI.
