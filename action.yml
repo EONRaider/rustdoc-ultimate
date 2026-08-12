@@ -122,6 +122,12 @@ runs:
       id: create-pr
       uses: peter-evans/create-pull-request@v7
       with:
+        # actions/checkout leaves a detached HEAD (the merge commit) on
+        # pull_request events, so create-pull-request can't infer its base
+        # branch from the current checkout the way it can for push or
+        # workflow_dispatch. Point it at the triggering PR's own branch so
+        # the doc fixes land there instead of failing outright.
+        base: ${{ github.event_name == 'pull_request' && github.head_ref || '' }}
         commit-message: "docs: apply rustdoc-ultimate (${{ inputs.mode }}, ${{ inputs.scope }})"
         branch: rustdoc-ultimate/${{ github.run_id }}
         title: "docs: rustdoc-ultimate documentation pass (${{ inputs.mode }})"
