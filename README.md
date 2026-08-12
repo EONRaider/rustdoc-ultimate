@@ -1,4 +1,4 @@
-# rustdoc-ultimate — The Complete Skill for Documenting Rust Code
+# rustdoc-ultimate — The Complete Claude Skill and GitHub Action for Documenting Rust Code
 
 [![GitHub Marketplace](https://img.shields.io/badge/Marketplace-rustdoc--ultimate-6e5494?logo=github)](https://github.com/marketplace/actions/rustdoc-ultimate)
 
@@ -6,7 +6,7 @@ A comprehensive reference for writing, structuring, testing, and shipping Rust d
 
 ## About this repo
 
-This README is the research itself. The repo also includes [rustdoc-ultimate.md](rustdoc-ultimate.md), a [Claude Skill](https://docs.claude.com/en/docs/claude-code/skills) built from this research — it teaches Claude to write, review, and refactor Rust documentation to the standard described below.
+This README is the research itself. The repo also includes [rustdoc-ultimate.md](rustdoc-ultimate.md), a [Claude Skill](https://docs.claude.com/en/docs/claude-code/skills) built from this research — it teaches Claude to write, review, and refactor Rust documentation to the standard described below. For repos that want that upkeep automated rather than invoked interactively, the same skill also ships as a [GitHub Action](https://github.com/marketplace/actions/rustdoc-ultimate) that runs on pull requests and opens a second PR with any documentation it adds or fixes.
 
 <details id="using-rustdoc-ultimate-as-a-claude-skill">
 <summary><strong>Using as a Claude Skill</strong></summary>
