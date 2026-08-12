@@ -1,8 +1,5 @@
 name: "rustdoc-ultimate"
-description: >-
-  Runs the rustdoc-ultimate Claude Skill against a Rust repository and opens a
-  pull request with any documentation it adds or improves. Never commits
-  directly to the calling branch.
+description: "Runs the rustdoc-ultimate Claude Skill against a Rust repo and opens a PR with any documentation it adds or fixes."
 author: "EONRaider"
 branding:
   icon: "book-open"
