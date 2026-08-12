@@ -12,7 +12,10 @@ This repo also ships a [GitHub Action](#using-rustdoc-ultimate-as-a-github-actio
 
 ## Using rustdoc-ultimate as a GitHub Action
 
-Instead of invoking the skill interactively, a Rust repository can run it as a CI step: on every push (by default), Claude documents or fixes what's missing and opens a pull request with the result — it never commits directly to your branch.
+Instead of invoking the skill interactively, a Rust repository can run it as a CI step: on every pull request (by default), Claude documents or fixes what's missing and opens a second pull request with the result — it never commits directly to your branch.
+
+> [!NOTE]
+> The default trigger is `pull_request`, not `push`. The underlying [`anthropics/claude-code-action`](https://github.com/anthropics/claude-code-action) rejects raw push events outright ("Unsupported event type: push" — see [issue #1456](https://github.com/anthropics/claude-code-action/issues/1456)), so `pull_request`, `workflow_dispatch`, and `schedule` are the triggers that actually work.
 
 ### Prerequisites
 
@@ -28,7 +31,7 @@ Copy [examples/rustdoc-ultimate.yml](examples/rustdoc-ultimate.yml) into `.githu
 ```yaml
 name: rustdoc-ultimate
 on:
-  push:
+  pull_request:
     branches: [main, master]
 
 permissions:
@@ -50,7 +53,7 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 ```
 
-The example file also shows (commented out) how to trigger on `pull_request`, `workflow_dispatch` with per-run `mode`/`scope` overrides, or a `schedule`.
+The example file also shows (commented out) how to trigger on `workflow_dispatch` with per-run `mode`/`scope` overrides, or a `schedule`.
 
 ### Inputs
 
