@@ -113,6 +113,7 @@ runs:
       with:
         anthropic_api_key: ${{ inputs.anthropic_api_key }}
         prompt: ${{ steps.prompt.outputs.prompt }}
+        show_full_output: true
         claude_args: >-
           --max-turns 25
           --allowedTools "Read,Edit,Grep,Glob,Bash(cargo doc:*),Bash(cargo test --doc:*)"
