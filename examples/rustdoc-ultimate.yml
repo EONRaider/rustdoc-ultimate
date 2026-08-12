@@ -35,6 +35,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write # required by anthropics/claude-code-action even with anthropic_api_key
 
 jobs:
   rustdoc-ultimate:
