@@ -11,6 +11,12 @@ tag for reproducible builds.
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-08-12
+
+### Fixed
+
+- `base_branch` was documented (in `action.yml` and the README) to control the diff base for `workflow_dispatch` and `schedule` triggers, but `scripts/collect-scope.sh` never actually read it for those two event types — only for `pull_request`. It now honors `base_branch` there too, falling back to the previous behavior (diffing the tip commit alone) when unset.
+
 ## [1.0.1] - 2026-08-12
 
 ### Fixed
@@ -62,6 +68,7 @@ tag for reproducible builds.
   call). Replaced with an explicit instruction for Claude to `Read` the skill
   file directly, which doesn't depend on CLI-level slash-command resolution.
 
-[Unreleased]: https://github.com/EONRaider/rustdoc-ultimate/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/EONRaider/rustdoc-ultimate/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/EONRaider/rustdoc-ultimate/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/EONRaider/rustdoc-ultimate/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/EONRaider/rustdoc-ultimate/compare/623f3d8...v1.0.0

@@ -32,8 +32,14 @@ case "${GITHUB_EVENT_NAME}" in
     after="HEAD"
     ;;
   workflow_dispatch|schedule)
-    # No natural "diff range" for these triggers; fall back to the tip commit.
-    before="${after}^"
+    # No natural "diff range" for these triggers; diff against base_branch
+    # if the caller set one, otherwise fall back to the tip commit.
+    if [[ -n "${INPUT_BASE_BRANCH}" ]]; then
+      git fetch --no-tags --depth=1 origin "${INPUT_BASE_BRANCH}" >&2
+      before="origin/${INPUT_BASE_BRANCH}"
+    else
+      before="${after}^"
+    fi
     ;;
   *)
     echo "unrecognized event '${GITHUB_EVENT_NAME}', defaulting to last commit only" >&2
