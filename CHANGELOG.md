@@ -64,4 +64,4 @@ tag for reproducible builds.
 
 [Unreleased]: https://github.com/EONRaider/rustdoc-ultimate/compare/v1.0.1...HEAD
 [1.0.1]: https://github.com/EONRaider/rustdoc-ultimate/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/EONRaider/rustdoc-ultimate/releases/tag/v1.0.0
+[1.0.0]: https://github.com/EONRaider/rustdoc-ultimate/compare/623f3d8...v1.0.0
